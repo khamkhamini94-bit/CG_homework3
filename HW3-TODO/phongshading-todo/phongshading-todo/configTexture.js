@@ -31,8 +31,23 @@ function configureCubeMap(program) {
 }
 
 /*TODO1:创建一般2D颜色纹理对象并加载图片*/
+/*TODO1: 创建一般2D颜色纹理对象并加载图片*/
 function configureTexture(image) {
     var texture = gl.createTexture();
     
+    // 绑定纹理对象到 TEXTURE_2D 目标
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // 将图片数据上传到 GPU
+    // image 可能是 HTMLImageElement，格式通常为 RGB 或 RGBA
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+    // 生成多级渐远纹理 (Mipmap)，用于不同距离下的采样优化
+    gl.generateMipmap(gl.TEXTURE_2D);
+
+    // 设置纹理过滤参数 (Minify 和 Magnify)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
     return texture;
 }
